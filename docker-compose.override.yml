@@ -1,0 +1,29 @@
+version: '3'
+services:
+  web:
+    command: python manage.py runserver 0.0.0.0:80
+    environment:
+      - DEBUG=1
+      - ALLOWED_HOSTS=*
+      - SITE_NAME=Coursify
+      - SITE_DOMAIN=localhost
+    volumes:
+      - .:/opt/coursify
+    ports:
+      - 80:80
+  queue-worker:
+    volumes:
+      - .:/opt/coursify
+  flower:
+    image: mher/flower
+    environment:
+      - CELERY_BROKER_URL=redis://redis:6379/0
+      - FLOWER_PORT=8888
+    ports:
+      - 8888:8888
+  redis-commander:
+    image: rediscommander/redis-commander
+    environment:
+      - REDIS_HOSTS=redis
+    ports:
+      - 8081:8081

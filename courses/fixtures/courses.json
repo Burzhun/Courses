@@ -1,0 +1,24 @@
+[
+  {
+    "model": "courses.course",
+    "pk": 1,
+    "fields": {
+      "name": "\u041c\u0430\u0442\u0435\u043c\u0430\u0442\u0438\u043a\u0430 1-\u0439 \u043a\u043b\u0430\u0441\u0441",
+      "slug": "matematika-1-j-klass",
+      "description": "",
+      "created_at": "2019-09-17T14:11:56.737Z"
+    }
+  },
+  {
+    "model": "courses.lesson",
+    "pk": 1,
+    "fields": {
+      "course": 1,
+      "name": "\u0412\u0432\u0435\u0434\u0435\u043d\u0438\u0435",
+      "slug": "vvedenie",
+      "video": "courses/lessons/vvedenie/SampleVideo_1280x720_5mb_7DA2WC8.mp4",
+      "content": "",
+      "created_at": "2019-09-17T14:32:30.616Z"
+    }
+  }
+]

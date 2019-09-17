@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ object.name }} | {{ block.super }}{% endblock %}
+
+{% block content %}
+  <h1>{{ object.name }}</h1>
+  <p>{{ object.description }}</p>
+
+  <h4>Уроки:</h4>
+  <ul>
+    {% for lesson in  object.lessons.all %}
+      <li><a href="{{ lesson.get_absolute_url }}">{{ lesson.name }}</a></li>
+    {% endfor %}
+  </ul>
+{% endblock %}

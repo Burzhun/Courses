@@ -1,0 +1,37 @@
+version: '3'
+services:
+  db:
+    image: postgres:11
+    environment:
+      - POSTGRES_USER=coursify
+      - POSTGRES_PASSWORD=coursify
+    volumes:
+      - db-data:/var/lib/postgresql/data/
+  redis:
+    image: redis
+    command: redis-server --appendonly yes
+    volumes:
+      - redis-data:/data
+  web:
+    <<: &web
+      build: .
+      environment:
+        - DATABASE_URL=postgres://coursify:coursify@db/coursify
+        - CELERY_BROKER_URL=redis://redis
+      depends_on:
+        - db
+        - redis
+      volumes:
+        - web-media:/opt/coursify/media/
+        - web-staticfiles:/opt/coursify/staticfiles/
+  queue-worker:
+    <<: *web
+    command: celery -A coursify worker -l info
+  queue-scheduler:
+    <<: *web
+    command: celery -A coursify beat -l info
+volumes:
+  db-data:
+  redis-data:
+  web-media:
+  web-staticfiles:

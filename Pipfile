@@ -1,0 +1,20 @@
+[[source]]
+name = "pypi"
+url = "https://pypi.org/simple"
+verify_ssl = true
+
+[dev-packages]
+django-debug-toolbar = "==1.11"
+coverage = "==4.5.3"
+sphinx = "==2.0.0"
+
+[packages]
+django = "==2.2"
+dj-database-url = "==0.5.0"
+psycopg2-binary = "==2.8"
+pillow = "==6.0.0"
+celery = {extras = ["redis"],version = "==4.3.0"}
+redis = "==3.2.1"
+
+[requires]
+python_version = "3.7"

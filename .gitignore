@@ -1,0 +1,11 @@
+.DS_Store
+.env
+.idea/
+.vscode/
+__pycache__/
+staticfiles/
+media/
+/docs/_build/
+
+celerybeat.pid
+celerybeat-schedule

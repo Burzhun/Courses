@@ -1,0 +1,31 @@
+{% extends "admin/base_site.html" %}
+
+{% load static i18n %}
+
+{% block breadcrumbs %}
+  <div class="breadcrumbs">
+    <a href="{% url 'admin:index' %}">{% trans 'Home' %}</a>
+    &rsaquo; {% trans 'Documentation' %}
+  </div>
+{% endblock %}
+{% block title %}{% trans 'Documentation' %}{% endblock %}
+
+{% block extrahead %}{{ block.super }}
+  <script src="{% static 'admin/js/vendor/jquery/jquery.min.js' %}"></script>
+  <script src="{% static 'admin/js/jquery.init.js' %}"></script>
+  <script>
+    (function ($) {
+      $(document).ready(function () {
+        $('#docs').on('load', function () {
+          $('#docs').height('100%');
+          $('#docs').height($('#docs').contents().height());
+          $('#docs').contents().find('a.external').attr('target', '_blank');
+        });
+      });
+    })(django.jQuery);
+  </script>
+{% endblock %}
+
+{% block content %}
+  <iframe id="docs" src="/admin/docs/index.html" frameborder="0" width="100%"></iframe>
+{% endblock %}

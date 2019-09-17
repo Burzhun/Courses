@@ -1,0 +1,91 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block styles %}
+  <style>
+    /* Fix the player container to take up 100% width and to calculate its height based on its children. */
+    [data-player] {
+      position: relative;
+      width: 100%;
+      height: auto;
+      margin: 0;
+    }
+
+    /* Fix the video container to take up 100% width and to calculate its height based on its children. */
+    [data-player] .container[data-container] {
+      width: 100%;
+      height: auto;
+      position: relative;
+    }
+
+    /* Fix the media-control element to take up the entire size of the player. */
+    [data-player] .media-control[data-media-control] {
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+    }
+
+    /* Fix the video element to take up 100% width and to calculate its height based on its natural aspect ratio. */
+    [data-player] video {
+      position: relative;
+      display: block;
+      width: 100%;
+      height: auto;
+    }
+  </style>
+{% endblock %}
+
+{% block title %}{{ object.name }} | {{ block.super }}{% endblock %}
+
+{% block content %}
+  <h1>{{ object.name }}</h1>
+  <div id="video-{{ object.id }}"></div>
+  {% if object.content %}
+    <p>{{ object.content }}</p>
+  {% endif %}
+{% endblock %}
+
+{% block scripts %}
+  <script src="{% static 'vendor/clappr/clappr.js' %}"></script>
+  <script src="{% static 'vendor/shaka-player/shaka-player.compiled.js' %}"></script>
+  <script src="{% static 'vendor/clappr/dash-shaka-playback.js' %}"></script>
+  <script src="{% static 'vendor/clappr/clappr-level-selector-plugin.min.js' %}"></script>
+  <script src="{% static 'vendor/clappr/clappr-playback-rate-plugin.js' %}"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", function (e) {
+      const manifestUri = "{{ object.video.mpd_url }}";
+      window.player = new Clappr.Player({
+        width: '100%',
+        height: 'auto',
+        source: manifestUri,
+        poster: "{{ object.video.preview_url }}",
+        plugins: [DashShakaPlayback, LevelSelector, Clappr.MediaControl, PlaybackRatePlugin],
+        playbackRateConfig: {
+          defaultValue: '1.0',
+          options: [
+            {value: '0.5', label: '0.5x'},
+            {value: '1.0', label: '1x'},
+            {value: '1.5', label: '1.5x'},
+            {value: '2.0', label: '2x'},
+          ]
+        },
+        shakaConfiguration: {
+          enableAdaption: true,
+          streaming: {
+            rebufferingGoal: 15,
+          }
+        },
+        levelSelectorConfig: {
+          title: 'Разрешение',
+          currentLevel: 2,
+          labelCallback: function (playbackLevel, customLabel) {
+            return playbackLevel.label;
+          }
+        },
+        parentId: '#video-{{ object.id }}'
+      });
+    });
+  </script>
+{% endblock %}
