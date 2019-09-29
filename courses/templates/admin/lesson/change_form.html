@@ -1,0 +1,24 @@
+{% extends "admin/change_form.html" %}
+
+{% block after_related_objects %}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="http://blueimp.github.io/jQuery-File-Upload/js/vendor/jquery.ui.widget.js"></script>
+<script src="http://blueimp.github.io/jQuery-File-Upload/js/jquery.fileupload.js"></script>
+<script>
+	window.onload = function(){
+		$('#id_video').after('<span id="id_video_load_text"></span>');
+		$('#id_video').fileupload({
+		    maxChunkSize: 1000000,
+		    url: '/admin/courses/lesson/upload_video/{{original.id}}/',
+		    
+
+		}).on('fileuploadchunkdone', function (e, data) {
+			var text = data.result;
+			if(text=='end'){
+				location.reload();
+			}
+			else $("#id_video_load_text").text("Загрузка "+text+'%');
+		});
+	}
+</script>
+{% endblock %}

@@ -22,6 +22,7 @@ class DashFilesNames:
     @classmethod
     def mpd_manifest_name(cls, video_name: str) -> str:
         """Возвращает название файла манифеста"""
+
         filename = cls.get_video_name(video_name)
         return filename + ".mpd"
 
@@ -183,6 +184,7 @@ class DashVideoManager:
                                 stderr=subprocess.PIPE,
                                 universal_newlines=True,
                                 shell=True)
+
         if not result.returncode == 0:
             return [checks.Error('Cannot generate ffmpeg dash mpd manifest')]
 
@@ -239,6 +241,7 @@ class DashVideoManager:
         video_file_name = self.temp_video_file.name
         cmd_video_height = 'ffmpeg -i ' + video_file_name + \
                            r' 2>&1 | grep Video: | grep -Po "\d{3,5}x\d{3,5}" | cut -d"x" -f1'
+              
         height = subprocess.check_output([cmd_video_height], shell=True)
         height_str = height.decode("utf-8", "strict")
 
@@ -284,7 +287,6 @@ class DashVideoManager:
 -use_timeline 1 \
 -use_template 1 \
 -f dash \
--adaptation_sets "id=0,streams=0,1,2,3 id=1,streams=4" \
 -init_seg_name {self._init_file_name_mask()} \
 -media_seg_name {self._seg_file_name_mask()} \
 {self._mpd_file_path()}'
